@@ -1,8 +1,9 @@
 <?php
 require './vendor/autoload.php';
 
-use Amoy\Regex\Search;
+use Amoy\RegexSearch\RegexSearch;
 
-$res=Search::demo();
+$demo_txt='sdf fds s aaaa@aa.com xxxdkfje4i2333 d34fsd 111.111.111.11 f4e4e4,22.22.22.33,d fdd';
 
-var_dump($res);
+$res=RegexSearch::setSubject($demo_txt)->Email()->All();
+dump($res);
