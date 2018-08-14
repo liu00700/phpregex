@@ -7,6 +7,9 @@ namespace Amoy\Regex;
 
 
 class Search{
+    public static function demo(){
+        return 'demo';
+    }
     public static function email($words){
 
     }
