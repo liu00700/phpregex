@@ -14,7 +14,10 @@
     },
     "autoload": {
         "psr-4": {
-            "Amoy\\Regex\\": "src/Amoy/Regex"
+            "Amoy\\Regex\\": "src"
         }
+    },
+    "require-dev": {
+        "symfony/var-dumper": "^3.3"
     }
 }
