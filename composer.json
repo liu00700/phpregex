@@ -14,7 +14,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Amoy\\RegexSearch\\": "src"
+            "AmoyRegex\\": "src"
         }
     },
     "require-dev": {

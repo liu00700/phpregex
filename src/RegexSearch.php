@@ -3,24 +3,25 @@
  * User: amoy
  */
 
-namespace Amoy\RegexSearch;
+namespace AmoyRegex;
 
 
 /**
  * Class RegexSearch
  * @package Amoy\RegexSearch
  *
-// * @method Ip()
-// * @method Email()
-// * @method Alls()
+ * @method RegexSearch Ip()
+ * @method RegexSearch Email()
+ * @method RegexSearch Url()
+ * @method RegexSearch Integer()
  */
 class RegexSearch{
 
     protected $EMAIL="/\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/";
     protected $IP="/\d+\.\d+\.\d+\.\d+/";
+    protected $URL="/(http|https):\/\/([\w\d\-_]+[\.\w\d\-_]+)[:\d+]?([\/]?[\w\/\.]+)/i";
+    protected $INTEGER="/[1-9]\d*/";
 
-
-    protected static $instance = null;
     protected $subject;
     protected $regex_res;
     protected $pattern;
@@ -43,28 +44,58 @@ class RegexSearch{
         }
         return call_user_func_array([$query,$name],$arguments);
     }
-    public function setSubject($subject){
+    public static function setSubject($subject){
         $class=new self();
         $class->subject=$subject;
         return $class;
     }
-    public function Email(){
-        $this->pattern=$this->EMAIL;
+    public function setRegex($pattern){
+        $this->pattern=$pattern;
         return $this->DealRes();
     }
-    public function Ip(){
-        $this->pattern=$this->IP;
+    public function CustomRegex($front='',$begin='',$end='',$last='',$is_short=true,$enable_break=false){
+        $regex_pattern='';
+        if(!empty($front)){
+            $regex_pattern="(?<=".$this->DealParam($front).")";
+        }
+        if(!empty($begin)){
+            $regex_pattern.=$this->DealParam($begin);
+        }
+        if($enable_break){
+            $regex_pattern.="[\w\W]";
+        }else{
+            $regex_pattern.=".";
+        }
+        if($is_short){
+            $regex_pattern.="*?";
+        }else{
+            $regex_pattern.="*";
+        }
+        if(!empty($end)){
+            $regex_pattern.=$this->DealParam($end);
+        }
+        if(!empty($last)){
+            $regex_pattern.="(?=".$this->DealParam($last).")";
+        }
+        $regex_pattern='/'.$regex_pattern.'/';
+        $this->pattern=$regex_pattern;
         return $this->DealRes();
+    }
+    private function DealParam($custom_param){
+        $custom_param=str_replace(['\\','$','.','(',')','*','+','[',']','?','^','{','}','|'],
+            ['\\\\','\$','\.','\(','\)','\*','\+','\[','\]','\?','\^','\{','\}','\|'],$custom_param);
+        return $custom_param;
     }
     private function DealRes(){
-        preg_match_all($this->pattern,$this->subject,$data);
-        if($data){
-            if(isset($data[0])){
-                $this->regex_res=$data[0];
-                return $this;
+        if(!empty($this->pattern)){
+            preg_match_all($this->pattern,$this->subject,$data);
+            if($data){
+                if(isset($data[0])){
+                    $this->regex_res=$data[0];
+                }
             }
         }
-        return false;
+        return $this;
     }
 
     public function First(){
@@ -86,6 +117,25 @@ class RegexSearch{
         return false;
     }
     public function All(){
-        return $this->regex_res;
+        if($this->regex_res){
+            return $this->regex_res;
+        }
+        return false;
+    }
+    public function Num($num){
+        if($this->regex_res){
+            $regex_res=$this->regex_res;
+            return $regex_res[$num];
+        }
+        return false;
+    }
+    /**
+     * @return int
+     */
+    public function Count(){
+        if($this->regex_res){
+            return count($this->regex_res);
+        }
+        return 0;
     }
 }
