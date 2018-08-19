@@ -53,6 +53,16 @@ class RegexSearch{
         $this->pattern=$pattern;
         return $this->DealRes();
     }
+
+    /**
+     * @param string $front 以此字符串开头，但不包含在结果里面
+     * @param string $begin 以此字符串开头，包含在结果里面
+     * @param string $end   以此字符串结尾，包含在结果里面
+     * @param string $last  以此字符串结尾，但不包含在结果里面
+     * @param bool $is_short    是否使用最短匹配
+     * @param bool $enable_break    是否包含换行匹配搜索
+     * @return RegexSearch
+     */
     public function CustomRegex($front='',$begin='',$end='',$last='',$is_short=true,$enable_break=false){
         $regex_pattern='';
         if(!empty($front)){
@@ -128,6 +138,9 @@ class RegexSearch{
             return $regex_res[$num];
         }
         return false;
+    }
+    public function getPattern(){
+        return $this->pattern;
     }
     /**
      * @return int
