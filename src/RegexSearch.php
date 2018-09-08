@@ -13,14 +13,29 @@ namespace AmoyRegex;
  * @method RegexSearch Ip()
  * @method RegexSearch Email()
  * @method RegexSearch Url()
- * @method RegexSearch Integer()
+ * @method RegexSearch Integer()    正整数
+ * @method RegexSearch ChinesLetters() 匹配中文
+// * @method RegexSearch EmptyLine()
+ * @method RegexSearch Alpha()
+ * @method RegexSearch LowercaseLetters()
+ * @method RegexSearch UppercaseLetters()
+// * @method RegexSearch ChineseTelephone()
+ *
  */
 class RegexSearch{
 
     protected $EMAIL="/\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/";
     protected $IP="/\d+\.\d+\.\d+\.\d+/";
     protected $URL="/(http|https):\/\/([\w\d\-_]+[\.\w\d\-_]+)[:\d+]?([\/]?[\w\/\.]+)/i";
-    protected $INTEGER="/[1-9]\d*/";
+    protected $INTEGER="/[1-9]\d*/";    //正整数
+    protected $CHINESELETTERS="/[\x{4e00}-\x{9fff}]+/u"; //匹配中文
+    protected $EMPTY_LINE="/\n[\s| ]*\r/";
+    protected $ALPHA="/[a-z]+/i";  //匹配26个字母，不分大小写
+    protected $LOWERCASELETTERS="/[a-z]+/";     // 匹配小写字母
+    protected $UPPERCASELETTERS="/[A-Z]+/";     // 匹配大写字母
+    protected $CHINESETELEPHONE="/((\(\d{2,3}\))|(\d{3}\-))?13\d{9}$/";  //中国手机号码
+    protected $HTML_TAG="/<([\w\W]*?)>/";
+
 
     protected $subject;
     protected $regex_res;
@@ -91,6 +106,15 @@ class RegexSearch{
         $this->pattern=$regex_pattern;
         return $this->DealRes();
     }
+
+    /**
+     * User: Jun
+     * Date: 2018/9/8
+     * Time: 上午11:05
+     * Remark: 替换自定义正则中的保留符号
+     * @param $custom_param 自定义正则表达式
+     * @return mixed
+     */
     private function DealParam($custom_param){
         $custom_param=str_replace(['\\','$','.','(',')','*','+','[',']','?','^','{','}','|'],
             ['\\\\','\$','\.','\(','\)','\*','\+','\[','\]','\?','\^','\{','\}','\|'],$custom_param);
