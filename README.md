@@ -45,5 +45,5 @@ $res=RegexSearch::setSubject($demo_txt)->CustomRegex('aaa','a@','yahoo','.com',t
 ````
 增加替换
 增加内置常用正则
-[soccer jerseys](https://www.soccersjerseys.com/)
 ````
+ [soccer jerseys](https://www.soccersjerseys.com/)
